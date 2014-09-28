@@ -51,7 +51,7 @@ class RestfulInboundConnector(db: ActorRef) extends InboundConnector {
         }
       } ~
       path("items" / Segment / "images") { id =>
-        post {
+        put {
           entity(as[Image]) { img =>
             complete { db ? AddImage(id, img) }
           }
