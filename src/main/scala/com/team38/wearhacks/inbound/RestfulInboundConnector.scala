@@ -25,11 +25,12 @@ class RestfulInboundConnector(db: ActorRef) extends InboundConnector {
       path("init") {
         post {
           complete {
-            (db ? "init1").flatMap {
-              case _ =>
-                db ? "init2"
-            }
+            db ? "init2"
           }
+//            (db ? "init1").flatMap {
+//              case _ =>
+//                db ? "init2"
+//            }
         }
       } ~
       path("items") {

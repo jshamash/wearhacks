@@ -24,7 +24,7 @@ class OrientDBConnector extends OutboundDB {
   def vertexToImage(v: ScalaVertex) = Image(v.url.toString, v.time.toString.toInt)
   def vertexToItem(v: ScalaVertex) = {
     val images = v.out("HasImage").toList().map(vertexToImage(_)).sortBy(_.time)
-    Item(v.itemid.toString, v.name.toString, images, v.audio.toString)
+    Item(v.itemid.toString, v.name.toString, images, v.audioUrl.toString)
   }
 
   def receive = {
@@ -71,7 +71,6 @@ class OrientDBConnector extends OutboundDB {
       }
 
     case GetItem(id) =>
-      def vertexToImage(v: ScalaVertex) = Image(v.url.toString, v.time.toString.toInt)
       val graph: OrientGraph = new OrientGraph(address, username, password)
 
       try {

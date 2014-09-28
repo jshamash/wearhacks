@@ -5,10 +5,14 @@ Wearhacks
 
 Our Wearhacks project. Think outside the glass!
 
+Running on Heroku at http://wearhacks38.herokuapp.com
+
 ### API
 
 - GET /items
+
 Status code: 200 OK
+
 Response body:
 ```
 [
@@ -31,6 +35,7 @@ Response body:
 ```
 
 - POST /items
+
 entity:
 ```
 {
@@ -49,6 +54,7 @@ entity:
 }
 ```
 Status code: 201 Created
+
 Response body:
 ```
 {
@@ -68,7 +74,9 @@ Response body:
 ```
 
 - GET /items/<id>
+
 Status code: 200 OK
+
 Response body:
 ```
 {
@@ -88,10 +96,13 @@ Response body:
 ```
 
 - DELETE /items/<id>
+
 Status code: 200 OK
+
 Response body: The deleted Item
 
 - PUT /items/<id>/images
+
 Entity:
 ```
 {
@@ -100,4 +111,5 @@ Entity:
 }
 ```
 Status code: 200 OK
+
 Response body: The updated item
