@@ -23,7 +23,7 @@ class OrientDBConnector extends OutboundDB {
 
   def vertexToImage(v: ScalaVertex) = Image(v.url.toString, v.time.toString.toInt)
   def vertexToItem(v: ScalaVertex) = {
-    val images = v.out("HasImage").toList().map(vertexToImage(_))
+    val images = v.out("HasImage").toList().map(vertexToImage(_)).sortBy(_.time)
     Item(v.itemid.toString, v.name.toString, images, v.audio.toString)
   }
 
@@ -130,8 +130,23 @@ class OrientDBConnector extends OutboundDB {
       catch exceptionHandler(graph, sender)
       finally graph.shutdown()
 
-    case AddImage(image) =>
+    case AddImage(id, image) =>
+      val graph: OrientGraph = new OrientGraph(address, username, password)
 
+      try {
+        val itemV = graph.getVertices("Item.itemid", id).headOption.getOrElse {
+          throw UpdateServerException(StatusCodes.NotFound,
+            "Item not found",
+            s"No corresponding item with id $id")
+        }
+        val imageV = graph.addVertex("class:Image", Tools.toMap(image).asJava)
+        itemV.addEdge("HasImage", imageV)
+        val item = vertexToItem(itemV)
+        graph.commit()
+        sender ! ItemUpdated(item)
+      }
+      catch exceptionHandler(graph, sender)
+      finally graph.shutdown()
 
     case unknown => log.warning("Got unknown message: " + unknown)
   }

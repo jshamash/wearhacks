@@ -34,7 +34,7 @@ class RestfulInboundConnector(db: ActorRef) extends InboundConnector {
       } ~
       path("items") {
         get {
-          complete { db ? GetItems }
+          complete { db ? GetItems() }
         } ~
         post {
           entity(as[Item]) { item =>
@@ -47,13 +47,13 @@ class RestfulInboundConnector(db: ActorRef) extends InboundConnector {
           complete { db ? GetItem(id) }
         } ~
         delete {
-          complete { "unimpl" }
+          complete { db ? DeleteItem(id) }
         }
       } ~
       path("items" / Segment / "images") { id =>
         post {
           entity(as[Image]) { img =>
-            complete { "unimpl" }
+            complete { db ? AddImage(id, img) }
           }
         }
       } ~
