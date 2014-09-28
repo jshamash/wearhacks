@@ -5,5 +5,5 @@ import spray.httpx.SprayJsonSupport
 
 object JsonProtocol extends DefaultJsonProtocol with SprayJsonSupport{
   implicit val imageJson = jsonFormat2(Image)
-  implicit val itemJson = jsonFormat(Item, "id", "name", "images", "audio")
+  implicit val itemJson = jsonFormat(Item, "id", "name", "images", "audioUrl")
 }

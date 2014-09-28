@@ -52,7 +52,7 @@ class OrientDBConnector extends OutboundDB {
 	      val itemV = graph.createVertexType("Item")
 	      itemV.createProperty("itemid", OType.STRING).setMandatory(true)
 	      itemV.createProperty("name", OType.STRING).setMandatory(true)
-	      itemV.createProperty("audio", OType.STRING).setMandatory(true)
+	      itemV.createProperty("audioUrl", OType.STRING).setMandatory(true)
 	      itemV.createIndex("itemIdx", OClass.INDEX_TYPE.UNIQUE, "itemid")
 	      
 	      log.info("Creating Image class")

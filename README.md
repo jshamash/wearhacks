@@ -15,7 +15,7 @@ Response body:
 {
   "id":"abc-123",
   "name":"Mona Lisa",
-  "audio":"http://www.example.com/audio.mp3",
+  "audioUrl":"http://www.example.com/audio.mp3",
   "images": [
     {
       "url":"http://www.example.com/image1.jpg",
@@ -36,7 +36,7 @@ entity:
 {
   "id":"abc-123",
   "name":"Mona Lisa",
-  "audio":"http://www.example.com/audio.mp3",
+  "audioUrl":"http://www.example.com/audio.mp3",
   "images": [
     {
       "url":"http://www.example.com/image1.jpg",
@@ -54,7 +54,7 @@ Response body:
 {
   "id":"abc-123",
   "name":"Mona Lisa",
-  "audio":"http://www.example.com/audio.mp3",
+  "audioUrl":"http://www.example.com/audio.mp3",
   "images": [
     {
       "url":"http://www.example.com/image1.jpg",
@@ -74,7 +74,7 @@ Response body:
 {
   "id":"<id>",
   "name":"Mona Lisa",
-  "audio":"http://www.example.com/audio.mp3",
+  "audioUrl":"http://www.example.com/audio.mp3",
   "images": [
     {
       "url":"http://www.example.com/image1.jpg",
