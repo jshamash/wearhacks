@@ -24,13 +24,7 @@ class RestfulInboundConnector(db: ActorRef) extends InboundConnector {
     sealRoute {
       path("init") {
         post {
-          complete {
-            db ? "init2"
-          }
-//            (db ? "init1").flatMap {
-//              case _ =>
-//                db ? "init2"
-//            }
+          complete { db ? "init2" }
         }
       } ~
       path("items") {
@@ -51,10 +45,10 @@ class RestfulInboundConnector(db: ActorRef) extends InboundConnector {
           complete { db ? DeleteItem(id) }
         }
       } ~
-      path("items" / Segment / "images") { id =>
+      path("items" / Segment / "cards") { id =>
         put {
-          entity(as[Image]) { img =>
-            complete { db ? AddImage(id, img) }
+          entity(as[Card]) { card =>
+            complete { db ? AddCard(id, card) }
           }
         }
       } ~

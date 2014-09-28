@@ -20,13 +20,15 @@ Response body:
   "id":"abc-123",
   "name":"Mona Lisa",
   "audioUrl":"http://www.example.com/audio.mp3",
-  "images": [
+  "cards": [
     {
-      "url":"http://www.example.com/image1.jpg",
+      "imageUrl":"http://www.example.com/image1.jpg",
+      "text": "some text",
       "time":0
     },
     {
-      "url":"http://www.example.com/image2.jpg",
+      "imageUrl":"http://www.example.com/image2.jpg",
+      "text": "some text",
       "time":500
     }]
 },
@@ -42,13 +44,15 @@ entity:
   "id":"abc-123",
   "name":"Mona Lisa",
   "audioUrl":"http://www.example.com/audio.mp3",
-  "images": [
+  "cards": [
     {
-      "url":"http://www.example.com/image1.jpg",
+      "imageUrl":"http://www.example.com/image1.jpg",
+      "text": "some text",
       "time":0
     },
     {
-      "url":"http://www.example.com/image2.jpg",
+      "imageUrl":"http://www.example.com/image2.jpg",
+      "text": "some text",
       "time":500
     }]
 }
@@ -61,52 +65,57 @@ Response body:
   "id":"abc-123",
   "name":"Mona Lisa",
   "audioUrl":"http://www.example.com/audio.mp3",
-  "images": [
+  "cards": [
     {
-      "url":"http://www.example.com/image1.jpg",
+      "imageUrl":"http://www.example.com/image1.jpg",
+      "text": "some text",
       "time":0
     },
     {
-      "url":"http://www.example.com/image2.jpg",
+      "imageUrl":"http://www.example.com/image2.jpg",
+      "text": "some text",
       "time":500
     }]
 }
 ```
 
-- GET /items/<id>
+- GET /items/:id
 
 Status code: 200 OK
 
 Response body:
 ```
 {
-  "id":"<id>",
+  "id":"abc-123",
   "name":"Mona Lisa",
   "audioUrl":"http://www.example.com/audio.mp3",
-  "images": [
+  "cards": [
     {
-      "url":"http://www.example.com/image1.jpg",
+      "imageUrl":"http://www.example.com/image1.jpg",
+      "text": "some text",
       "time":0
     },
     {
-      "url":"http://www.example.com/image2.jpg",
+      "imageUrl":"http://www.example.com/image2.jpg",
+      "text": "some text",
       "time":500
     }]
 }
 ```
 
-- DELETE /items/<id>
+- DELETE /items/:id
 
 Status code: 200 OK
 
 Response body: The deleted Item
 
-- PUT /items/<id>/images
+- PUT /items/:id/images
 
 Entity:
 ```
 {
-    "url":"http://www.example.com/image3.jpg",
+    "imageUrl":"http://www.example.com/image3.jpg",
+    "text":"some text",
     "time":1000
 }
 ```

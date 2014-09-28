@@ -1,6 +1,6 @@
 package com.team38.wearhacks.internal.messaging
 
-import com.team38.wearhacks.internal.model.{Image, Item}
+import com.team38.wearhacks.internal.model.{Card, Item}
 import com.team38.wearhacks.internal.model.JsonProtocol._
 import spray.json._
 import spray.http.MediaTypes._
@@ -12,7 +12,7 @@ trait Message {}
 trait DBRequest extends Message
 case class GetItem(id: String) extends DBRequest
 case class AddItem(item: Item) extends DBRequest
-case class AddImage(itemid: String, image: Image) extends DBRequest
+case class AddCard(itemid: String, card: Card) extends DBRequest
 case class DeleteItem(id: String) extends DBRequest
 case class GetItems() extends DBRequest
 

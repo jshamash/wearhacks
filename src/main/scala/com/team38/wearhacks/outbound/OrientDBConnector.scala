@@ -1,7 +1,7 @@
 package com.team38.wearhacks.outbound
 
 import akka.actor.actorRef2Scala
-import com.team38.wearhacks.internal.model.{Item, Image}
+import com.team38.wearhacks.internal.model.{Item, Card}
 import com.tinkerpop.gremlin.scala.ScalaVertex
 import com.tinkerpop.gremlin.scala.ScalaVertex._
 import spray.http.StatusCodes
@@ -21,10 +21,10 @@ class OrientDBConnector extends OutboundDB {
   val remoteUser = config.getString("orientdb.remote.user")
   val remotePass = config.getString("orientdb.remote.password")
 
-  def vertexToImage(v: ScalaVertex) = Image(v.url.toString, v.time.toString.toInt)
+  def vertexToCard(v: ScalaVertex) = Card(v.imageUrl.toString, v.text.toString, v.time.toString.toInt)
   def vertexToItem(v: ScalaVertex) = {
-    val images = v.out("HasImage").toList().map(vertexToImage(_)).sortBy(_.time)
-    Item(v.itemid.toString, v.name.toString, images, v.audioUrl.toString)
+    val cards = v.out("HasCard").toList().map(vertexToCard(_)).sortBy(_.time)
+    Item(v.itemid.toString, v.name.toString, cards, v.audioUrl.toString)
   }
 
   def receive = {
@@ -55,13 +55,14 @@ class OrientDBConnector extends OutboundDB {
 	      itemV.createProperty("audioUrl", OType.STRING).setMandatory(true)
 	      itemV.createIndex("itemIdx", OClass.INDEX_TYPE.UNIQUE, "itemid")
 	      
-	      log.info("Creating Image class")
-	      val imageV = graph.createVertexType("Image")
-	      imageV.createProperty("url", OType.STRING).setMandatory(true)
-	      imageV.createProperty("time", OType.INTEGER).setMandatory(true)
+	      log.info("Creating Card class")
+	      val cardV = graph.createVertexType("Card")
+	      cardV.createProperty("imageUrl", OType.STRING).setMandatory(true)
+        cardV.createProperty("text", OType.STRING).setMandatory(true)
+	      cardV.createProperty("time", OType.INTEGER).setMandatory(true)
 	      
-	      log.info("Creating HasImage edge class")
-	      graph.createEdgeType("HasImage")
+	      log.info("Creating HasCard edge class")
+	      graph.createEdgeType("HasCard")
 	      
 	      sender ! "ok"
       } catch {
@@ -89,12 +90,12 @@ class OrientDBConnector extends OutboundDB {
     case AddItem(item) =>
       val graph: OrientGraph = new OrientGraph(address, username, password)
       try {
-        val imageProps = item.images map Tools.toMap
-        val itemProps = Tools.toMap(item) - "images"
+        val cardProps = item.cards map Tools.toMap
+        val itemProps = Tools.toMap(item) - "cards"
         val itemV: OrientVertex = graph.addVertex("class:Item", itemProps.asJava)
-        imageProps map { props =>
-          val imageV: OrientVertex = graph.addVertex("class:Image", props.asJava)
-          itemV.addEdge("HasImage", imageV)
+        cardProps map { props =>
+          val cardV: OrientVertex = graph.addVertex("class:Card", props.asJava)
+          itemV.addEdge("HasCard", cardV)
         }
         graph.commit()
         sender ! ItemCreated(item)
@@ -129,7 +130,7 @@ class OrientDBConnector extends OutboundDB {
       catch exceptionHandler(graph, sender)
       finally graph.shutdown()
 
-    case AddImage(id, image) =>
+    case AddCard(id, card) =>
       val graph: OrientGraph = new OrientGraph(address, username, password)
 
       try {
@@ -138,8 +139,8 @@ class OrientDBConnector extends OutboundDB {
             "Item not found",
             s"No corresponding item with id $id")
         }
-        val imageV = graph.addVertex("class:Image", Tools.toMap(image).asJava)
-        itemV.addEdge("HasImage", imageV)
+        val cardV = graph.addVertex("class:Card", Tools.toMap(card).asJava)
+        itemV.addEdge("HasCard", cardV)
         val item = vertexToItem(itemV)
         graph.commit()
         sender ! ItemUpdated(item)
