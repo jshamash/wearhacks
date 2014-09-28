@@ -1,6 +1,6 @@
 Wearhacks
 ============
 
-## Project description
+### Project description
 
 Our Wearhacks project. Think outside the glass!
