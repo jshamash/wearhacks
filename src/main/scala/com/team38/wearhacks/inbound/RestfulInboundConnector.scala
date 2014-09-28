@@ -34,7 +34,7 @@ class RestfulInboundConnector(db: ActorRef) extends InboundConnector {
       } ~
       path("items") {
         get {
-          complete { "unimpl" }
+          complete { db ? GetItems }
         } ~
         post {
           entity(as[Item]) { item =>

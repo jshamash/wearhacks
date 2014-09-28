@@ -21,6 +21,12 @@ class OrientDBConnector extends OutboundDB {
   val remoteUser = config.getString("orientdb.remote.user")
   val remotePass = config.getString("orientdb.remote.password")
 
+  def vertexToImage(v: ScalaVertex) = Image(v.url.toString, v.time.toString.toInt)
+  def vertexToItem(v: ScalaVertex) = {
+    val images = v.out("HasImage").toList().map(vertexToImage(_))
+    Item(v.itemid.toString, v.name.toString, images, v.audio.toString)
+  }
+
   def receive = {
 
     // For testing purposes: create the database instance
@@ -74,8 +80,7 @@ class OrientDBConnector extends OutboundDB {
             "Item not found",
             s"No corresponding item with id $id")
         }
-        val images = itemV.out("HasImage").toList().map(vertexToImage(_))
-        val item = Item(itemV.itemid.toString, itemV.name.toString, images, itemV.audio.toString)
+        val item = vertexToItem(itemV)
         graph.commit()
         sender ! ItemInfo(item)
       }
@@ -94,6 +99,19 @@ class OrientDBConnector extends OutboundDB {
         }
         graph.commit()
         sender ! ItemCreated(item)
+      }
+      catch exceptionHandler(graph, sender)
+      finally graph.shutdown()
+
+    case GetItems() =>
+      val graph: OrientGraph = new OrientGraph(address, username, password)
+
+      try {
+        val items = graph.getVerticesOfClass("Item").map { v =>
+          vertexToItem(v)
+        }
+        graph.commit()
+        sender ! ItemsInfo(items.toList)
       }
       catch exceptionHandler(graph, sender)
       finally graph.shutdown()
