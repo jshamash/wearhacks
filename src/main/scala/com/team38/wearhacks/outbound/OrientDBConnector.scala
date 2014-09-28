@@ -115,7 +115,24 @@ class OrientDBConnector extends OutboundDB {
       }
       catch exceptionHandler(graph, sender)
       finally graph.shutdown()
-      
+
+    case DeleteItem(id) =>
+      val graph: OrientGraph = new OrientGraph(address, username, password)
+
+      try {
+        val item = graph.getVertices("Item.itemid", id).map{ vertex =>
+          vertex.remove()
+          vertexToItem(vertex)
+        }.headOption
+        graph.commit()
+        sender ! ItemDeleted(item)
+      }
+      catch exceptionHandler(graph, sender)
+      finally graph.shutdown()
+
+    case AddImage(image) =>
+
+
     case unknown => log.warning("Got unknown message: " + unknown)
   }
 
